@@ -3,13 +3,26 @@
   "version": "1.0.0",
   "description": "telegram bot to parse and get images from url",
   "scripts": {
-    "start": "pm2 start app.js"
+    "start": "pm2 start app.js",
+    "prod": "node app.js"
   },
   "dependencies": {
     "cheerio": "^1.0.0-rc.11",
     "node-telegram-bot-api": "^0.57.0",
     "puppeteer": "^14.1.1",
     "request": "^2.88.2"
-  }
- 
+  },
+  "main": "app.js",
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kazapanama/olx-domria.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kazapanama/olx-domria/issues"
+  },
+  "homepage": "https://github.com/kazapanama/olx-domria#readme"
 }
