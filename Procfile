@@ -1,1 +1,1 @@
-prod : npm start
+prod : npm prod
