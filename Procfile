@@ -1,1 +1,1 @@
-prod : npm prod
+prod: npm prod
