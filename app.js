@@ -1,6 +1,6 @@
 var request = require('request');
 var cheerio = require('cheerio');
-const token = '5306003933:AAE9WZ23wlCMfFaMCJ9ihhRFWcSzx3EesAw';
+const token = '5306003933:AAFs4w6cFDK9JDNLm6VofJW6CNmkga8dlBI';
 const TelegramApi = require('node-telegram-bot-api');
 const puppeteer = require('puppeteer');
 const bot = new TelegramApi(token, {polling:true});
