@@ -17,7 +17,7 @@ const output = (images, chatId) =>{
 //olx function
 const olx =  async function olx(url,chatId) {
     bot.sendMessage(chatId,'>_<\nOLX чуть довше, ждіті')
-    const browser = await puppeteer.launch({headless:true});
+    const browser = await puppeteer.launch({args: ['--no-sandbox'],headless:true});
     const page = await browser.newPage();
 
     await page.goto(url)
