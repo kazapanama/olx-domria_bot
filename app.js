@@ -23,8 +23,7 @@ const olx =  async function olx(url,chatId) {
     await page.goto(url)
    
     var images = [];
-    var i = 1;
-    var repeat = await page.evaluate(()=>document.querySelector('.swiper-pagination-bullet').length)
+   
     
     var img = await page.evaluate(()=>document.querySelector('.swiper-slide-active > div >img').src)
     images.push(img)
@@ -70,21 +69,91 @@ const domRia = async function(url,chatId){
 })}
 
 
+//Кнопочки для документіків
+const showDocs = {
+    reply_markup: JSON.stringify({
+        inline_keyboard: [
+            [{text: 'Документік раз', callback_data: 'doc1'}],
+            [{text: 'Документік дваз', callback_data: 'doc2'}],
+            [{text: 'Документік триз', callback_data: 'doc3'}],
+            
+        ]
+    })
+}
+
+
+
+
+
+
+bot.setMyCommands([
+    {command:'/start', description:'Починає роботу з ботом'},
+    {command:'/docs', description:'Список доступних документів'},
+    {command:'/o1', description:'1-кімнатна квартира | оренда'},
+    {command:'/o2', description:'2-кімнатна квартира | оренда'},
+    {command:'/o3', description:'3-кімнатна квартира | оренда'}
+])
+
+
+bot.on('callback_query', async (msg)=>{
+    
+    const data = msg.data;
+    const chatId = msg.message.chat.id;
+
+    const fileOptions = {
+        // Explicitly specify the file name.
+        filename: 'casdasda',
+        // Explicitly specify the MIME type.
+        contentType: 'application/javascript',
+      };
+
+
+
+    if (data === 'doc1'){
+       return  bot.sendDocument(chatId,'BQACAgIAAxkBAAIHHWKUHSja0mM9cEyRoxHm6p_Tyj8sAALHGgAC0SGhSBoiNwABxgpUJiQE')
+    } else if (data === 'doc2'){
+        return  bot.sendDocument(chatId,"BQACAgIAAxkBAAIHHmKUHUKMQAAB_3sGT-YGkbZTFU4lPAACyBoAAtEhoUgxftX_4SRfAiQE")
+    } else if(data === 'doc3'){
+        return   bot.sendDocument(chatId,"BQACAgIAAxkBAAIHH2KUHVqJgLIDVc78ittMx-0Khmz9AALJGgAC0SGhSL-hv0XLfhrlJAQ")
+    }
+
+})
+
+
+
+
 bot.on('message', msg =>{
     const url = msg.text
     console.log(url)
     const chatId = msg.chat.id
     
-    if (url == '/start'){
+    if (url === '/start'){
         bot.sendMessage(chatId,'Шалом Анастасія')
     } 
+
+
+    if(url === '/o1'){
+        bot.sendMessage(chatId,'Здам в оренду однокімнатну квартиру на довготривалий термін.\nКвартира тепла та затишна, поруч є все необхідне для комфортного проживання, магазини, супермаркети.\nКвартира здається лише на довгий термін, для порядних людей без шкідливих звичок.\nТихий та спокійний район міста.')
+    }
+
+    if(url === '/o2'){
+        bot.sendMessage(chatId,'Здам в оренду двокімнатну квартиру на довготривалий термін.\nКвартира тепла та затишна, поруч є все необхідне для комфортного проживання, магазини, супермаркети.\nКвартира здається лише на довгий термін, для порядних людей без шкідливих звичок.\nТихий та спокійний район міста.')
+    }
+
+    if(url === '/o3'){
+        bot.sendMessage(chatId,'Здам в оренду трикімнатну квартиру на довготривалий термін.\nКвартира тепла та затишна, поруч є все необхідне для комфортного проживання, магазини, супермаркети.\nКвартира здається лише на довгий термін, для порядних людей без шкідливих звичок.\nТихий та спокійний район міста.')
+    }
+
+    if(url === '/docs'){
+        bot.sendMessage(chatId,'От які є документікі:',showDocs)
+    }
 
     if (url.indexOf('https') == 0){
 
         //olx direct link
-        if (url.indexOf('olx.ua') === 8 || url.indexOf('olx.ua') === 12){
-                olx(url,chatId)
-                images = []
+        if (url.indexOf('olx.ua') === 8 || url.indexOf('olx.ua') === 12){    
+            olx(url,chatId)
+            images = []     
         }
 
         //dom.ria direct link
