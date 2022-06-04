@@ -1,6 +1,7 @@
 var request = require('request');
 var cheerio = require('cheerio');
-const token = '5306003933:AAFs4w6cFDK9JDNLm6VofJW6CNmkga8dlBI';
+require('dotenv').config();
+const token = process.env.BOT_API_KEY;
 const TelegramApi = require('node-telegram-bot-api');
 const puppeteer = require('puppeteer');
 const bot = new TelegramApi(token, {polling:true});
@@ -91,8 +92,11 @@ bot.setMyCommands([
     {command:'/docs', description:'Список доступних документів'},
     {command:'/o1', description:'1-кімнатна квартира | оренда'},
     {command:'/o2', description:'2-кімнатна квартира | оренда'},
-    {command:'/o3', description:'3-кімнатна квартира | оренда'}
+    {command:'/o3', description:'3-кімнатна квартира | оренда'},
+    {command:'/constr', description:'Конструктор описів'}
 ])
+
+
 
 
 bot.on('callback_query', async (msg)=>{
@@ -146,6 +150,10 @@ bot.on('message', msg =>{
 
     if(url === '/docs'){
         bot.sendMessage(chatId,'От які є документікі:',showDocs)
+    }
+
+    if(url === '/constr'){
+        bot.sendMessage(chatId,'https://kazapanama.github.io/realty-constructor/')
     }
 
     if (url.indexOf('https') == 0){
