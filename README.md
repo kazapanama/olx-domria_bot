@@ -2,11 +2,11 @@
 
 Link to fully working project: [Telegram link](https://telegram.me/img_dmr_bot)
 
-##about project
+## About project
 
 This bot was created for a small real estate agency, to boost their productivity and do some routine work much faster.
 
-##What can it do
+## What can it do
 
 First of all it can get all the images from advertisements pages on sites dom.ria and olx 
 To get all items from 1 advertisment just paste-in url of it directly to the bot
@@ -19,7 +19,7 @@ And if you dont want pre-built descriptions, bot will give you url to 'descripit
 
 
 
-##What did i learned in the process?
+## What did i learned in the process?
 
 - That was my first hands-on expirience with nodeJS
 - Learned how to create and setup a bot in telegram
