@@ -14,7 +14,6 @@ const output = (images, chatId) =>{
        }
 }
 
-
 //olx function
 const olx =  async function olx(url,chatId) {
     bot.sendMessage(chatId,'>_<\nOLX чуть довше, ждіті')
@@ -74,10 +73,8 @@ const domRia = async function(url,chatId){
 const showDocs = {
     reply_markup: JSON.stringify({
         inline_keyboard: [
-            [{text: 'Документік раз', callback_data: 'doc1'}],
-            [{text: 'Документік дваз', callback_data: 'doc2'}],
-            [{text: 'Документік триз', callback_data: 'doc3'}],
-            
+            [{text: 'Договір оренди та акт', callback_data: 'doc1'}],
+            [{text: 'Ексклюзивний договір та акти', callback_data: 'doc2'}],
         ]
     })
 }
@@ -93,7 +90,9 @@ bot.setMyCommands([
     {command:'/o1', description:'1-кімнатна квартира | оренда'},
     {command:'/o2', description:'2-кімнатна квартира | оренда'},
     {command:'/o3', description:'3-кімнатна квартира | оренда'},
-    {command:'/constr', description:'Конструктор описів'}
+    {command:'/constr', description:'Конструктор описів'},
+    {command:'/m1', description:'Макети на розклейку | Анастасія'},
+    {command:'/m2', description:'Макети на розклейку | Тетяна'}
 ])
 
 
@@ -114,14 +113,14 @@ bot.on('callback_query', async (msg)=>{
 
 
     if (data === 'doc1'){
-       return  bot.sendDocument(chatId,'BQACAgIAAxkBAAIHHWKUHSja0mM9cEyRoxHm6p_Tyj8sAALHGgAC0SGhSBoiNwABxgpUJiQE')
+       return  [bot.sendDocument(chatId,'BQACAgIAAxkBAAIM0WKwu7wbBjoh6LD12P1h73tr0s-WAAJFGwACmEqJSaFWiHRdwpdpKAQ'),
+                bot.sendDocument(chatId,'BQACAgIAAxkBAAIM0mKwu9Gg8LfPa3J_ndLiNpz8qZ9qAAJGGwACmEqJSShZUOdMxBuPKAQ')]
     } else if (data === 'doc2'){
-        return  bot.sendDocument(chatId,"BQACAgIAAxkBAAIHHmKUHUKMQAAB_3sGT-YGkbZTFU4lPAACyBoAAtEhoUgxftX_4SRfAiQE")
-    } else if(data === 'doc3'){
-        return   bot.sendDocument(chatId,"BQACAgIAAxkBAAIHH2KUHVqJgLIDVc78ittMx-0Khmz9AALJGgAC0SGhSL-hv0XLfhrlJAQ")
-    }
-
+        return  bot.sendDocument(chatId,"BQACAgIAAxkBAAIM02Kwu-BEdEcpzI54rwABUK2L4bivCQACRxsAAphKiUmj8ojC96GUKigE")
+    } 
 })
+
+
 
 
 
@@ -154,6 +153,16 @@ bot.on('message', msg =>{
 
     if(url === '/constr'){
         bot.sendMessage(chatId,'https://kazapanama.github.io/realty-constructor/')
+    }
+
+    if(url === '/m1'){
+        bot.sendDocument(chatId,"BQACAgIAAxkBAAIM1GKwu_pKrvhMrwLMXolazbGqILZ-AAJJGwACmEqJSf9SkTrf2ozBKAQ")
+        bot.sendDocument(chatId,"BQACAgIAAxkBAAIM1WKwvBIlz2N-ysd7-MVbxJLZxy6zAAJKGwACmEqJSeJ2W18viFbgKAQ")
+    }
+
+    if(url === '/m2'){
+        bot.sendDocument(chatId,"BQACAgIAAxkBAAIM1mKwvCYaDw3em1G7Ai4ZQIP-_vufAAJLGwACmEqJSbwp7ihS6tpkKAQ")
+        bot.sendDocument(chatId,"BQACAgIAAxkBAAIM12KwvDpLz9RfsvSHqyKovFwMsNWnAAJMGwACmEqJSZtF-lhptkSqKAQ")
     }
 
     if (url.indexOf('https') == 0){
