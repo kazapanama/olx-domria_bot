@@ -19,37 +19,42 @@ const olx =  async function olx(url,chatId) {
     bot.sendMessage(chatId,'>_<\nOLX чуть довше, ждіті')
     const browser = await puppeteer.launch({args: ['--no-sandbox'],headless:true});
     const page = await browser.newPage();
+    await page.setViewport({width:1366,height:766})
+    
 
     await page.goto(url)
+    
    
     var images = [];
-   
+    
     
     var img = await page.evaluate(()=>document.querySelector('.swiper-slide-active > div >img').src)
+
     images.push(img)
     
-    //15 clicks
-    await page.click('.swiper-button-next')
-    await page.click('.swiper-button-next')
-    await page.click('.swiper-button-next')
-    await page.click('.swiper-button-next')
-    await page.click('.swiper-button-next')
-    await page.click('.swiper-button-next')
-    await page.click('.swiper-button-next')
-    await page.click('.swiper-button-next')
-    await page.click('.swiper-button-next')
-    await page.click('.swiper-button-next')
-    await page.click('.swiper-button-next')
-    await page.click('.swiper-button-next')
-    await page.click('.swiper-button-next')
-    await page.click('.swiper-button-next')
-    await page.click('.swiper-button-next')
+    
+    //10 clicks
+    
+    await page.click('.swiper-button-next') 
+    await page.click('.swiper-button-next') 
+    await page.click('.swiper-button-next') 
+    await page.click('.swiper-button-next') 
+    await page.click('.swiper-button-next') 
+    await page.click('.swiper-button-next') 
+    await page.click('.swiper-button-next') 
+    await page.click('.swiper-button-next') 
+    await page.click('.swiper-button-next') 
+    await page.click('.swiper-button-next') 
+    
+   
+    
   
     var kartinkas = await page.evaluate(()=>Array.from(document.querySelectorAll('.swiper-zoom-container >img')).map((x)=>x.src))
     var images = [...new Set(kartinkas)];
     
-    await browser.close()
     output(images,chatId)
+    await browser.close()
+    
     
 }
 
