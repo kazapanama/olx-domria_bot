@@ -33,7 +33,7 @@ const olx =  async function olx(url,chatId) {
     images.push(img)
     
     
-    //10 clicks
+     //10 clicks
     
     await page.click('.swiper-button-next') 
     await page.click('.swiper-button-next') 
