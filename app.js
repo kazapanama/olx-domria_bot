@@ -1,7 +1,7 @@
 var request = require('request');
 var cheerio = require('cheerio');
 require('dotenv').config();
-const token = process.env.BOT_API_KEY;
+const token = '5306003933:AAFs4w6cFDK9JDNLm6VofJW6CNmkga8dlBI';
 const TelegramApi = require('node-telegram-bot-api');
 const puppeteer = require('puppeteer');
 const bot = new TelegramApi(token, {polling:true});
@@ -19,7 +19,7 @@ const olx =  async function olx(url,chatId) {
     bot.sendMessage(chatId,'>_<\nOLX чуть довше, ждіті')
     const browser = await puppeteer.launch({args: ['--no-sandbox'],headless:true});
     const page = await browser.newPage();
-    await page.setViewport({width:1366,height:766})
+    await page.setViewport({width:1920,height:1080})
     
 
     await page.goto(url)
