@@ -1,11 +1,20 @@
 import request from 'request';
 import cheerio from 'cheerio';
-import dotenv from 'dotenv'
-dotenv.config()
-
-const token = '5306003933:AAFs4w6cFDK9JDNLm6VofJW6CNmkga8dlBI';
-import TelegramApi from 'node-telegram-bot-api';
 import puppeteer from 'puppeteer';
+import * as dotenv from 'dotenv'
+dotenv.config()
+import { client, addNewUser, increaseUserDownloads } from './db.js'
+
+//db connection
+client.connect((err) => {
+    if (err) {
+        console.log(err.message)
+    }
+    console.log('connected to db')
+})
+
+const token = process.env.BOT_API_KEY;
+import TelegramApi from 'node-telegram-bot-api';
 const bot = new TelegramApi(token, { polling: true });
 var images = [];
 
@@ -23,20 +32,13 @@ const olx = async function olx(url, chatId) {
     const page = await browser.newPage();
     await page.setViewport({ width: 1920, height: 1080 })
 
-
     await page.goto(url)
 
-
     var images = [];
-
-
     var img = await page.evaluate(() => document.querySelector('.swiper-slide-active > div >img').src)
-
     images.push(img)
 
-
     //10 clicks
-
     await page.click('.swiper-button-next')
     await page.click('.swiper-button-next')
     await page.click('.swiper-button-next')
@@ -47,17 +49,13 @@ const olx = async function olx(url, chatId) {
     await page.click('.swiper-button-next')
     await page.click('.swiper-button-next')
     await page.click('.swiper-button-next')
-
-
-
 
     var kartinkas = await page.evaluate(() => Array.from(document.querySelectorAll('.swiper-zoom-container >img')).map((x) => x.src))
     var images = [...new Set(kartinkas)];
 
     output(images, chatId)
+    increaseUserDownloads('olx', chatId, images.length)
     await browser.close()
-
-
 }
 
 //dom.ria function
@@ -73,6 +71,7 @@ const domRia = async function (url, chatId) {
             })
         }
         output(images, chatId)
+        increaseUserDownloads('domria', chatId, images.length)
     })
 }
 
@@ -96,25 +95,16 @@ bot.setMyCommands([
     { command: '/o3', description: '3-кімнатна квартира | оренда' },
     { command: '/constr', description: 'Конструктор описів' },
     { command: '/m1', description: 'Макети на розклейку | Анастасія' },
-    { command: '/m2', description: 'Макети на розклейку | Тетяна' }
+    { command: '/m2', description: 'Макети на розклейку | Тетяна' },
+    { command: '/stats', description: 'Показує статистику по закачкам' }
 ])
 
 
 
 
 bot.on('callback_query', async (msg) => {
-    
     const data = msg.data;
     const chatId = msg.message.chat.id;
-
-    const fileOptions = {
-        // Explicitly specify the file name.
-        filename: 'casdasda',
-        // Explicitly specify the MIME type.
-        contentType: 'application/javascript',
-    };
-
-
 
     if (data === 'doc1') {
         return [bot.sendDocument(chatId, 'BQACAgIAAxkBAAIgAmNjCf2OT6SgWbs_S83ge21YVWI9AAKFKAACuq0ZS82l5gJbUCyQKgQ'),
@@ -125,20 +115,23 @@ bot.on('callback_query', async (msg) => {
 })
 
 
+bot.on('message', async msg => {
 
-
-
-
-bot.on('message', msg => {
-    console.log(msg)
     const url = msg.text
     console.log(url)
+    const userName = msg.from.username
     const chatId = msg.chat.id
 
     if (url === '/start') {
+        try {
+            addNewUser(chatId, userName)
+        }
+        catch (e) {
+            console.log(e.message)
+        }
+
         bot.sendMessage(chatId, 'Шалом Анастасія')
     }
-
 
     if (url === '/o1') {
         bot.sendMessage(chatId, 'Здам в оренду однокімнатну квартиру на довготривалий термін.\nКвартира тепла та затишна, поруч є все необхідне для комфортного проживання, магазини, супермаркети.\nКвартира здається лише на довгий термін, для порядних людей без шкідливих звичок.\nТихий та спокійний район міста.')
@@ -158,6 +151,32 @@ bot.on('message', msg => {
 
     if (url === '/constr') {
         bot.sendMessage(chatId, 'https://kazapanama.github.io/realty-constructor/')
+    }
+
+    if (url === '/stats') {
+
+        client.query('SELECT * FROM users', (err, result) => {
+            if (err) {
+                return console.error('error running query', err);
+            }
+            const allStats = result.rows
+
+            const userStats = allStats.find(item => item.userid === chatId)
+
+            const totalDownloads = allStats.reduce((acc, item) => acc += (item.olx_total_saved + item.domria_total_saved), 0)
+
+            const text = `
+            Статистика по користувачу ${userName}:
+            скачано з olx:${userStats.olx_total_saved}
+            скачано з domria:${userStats.domria_total_saved}
+            
+            Всього ботом скачано:${totalDownloads} з моменту початку підрахунку
+            `
+            bot.sendMessage(chatId, text)
+        })
+
+
+
     }
 
     if (url === '/m1') {
@@ -212,6 +231,10 @@ bot.on('message', msg => {
         }
 
     }
+
+
+
+
 
 })
 
