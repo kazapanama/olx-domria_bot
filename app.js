@@ -1,6 +1,7 @@
 import request from 'request';
 import cheerio from 'cheerio';
 import puppeteer from 'puppeteer';
+import TelegramApi from 'node-telegram-bot-api';
 import * as dotenv from 'dotenv'
 dotenv.config()
 import { client, addNewUser, increaseUserDownloads } from './db.js'
@@ -14,8 +15,8 @@ client.connect((err) => {
 })
 
 const token = process.env.BOT_API_KEY;
-import TelegramApi from 'node-telegram-bot-api';
-const bot = new TelegramApi(token, { polling: true });
+
+const bot = new TelegramApi(token, { polling: true, port: 3001 });
 var images = [];
 
 //output
